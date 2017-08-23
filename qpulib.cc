@@ -45,6 +45,7 @@ void GCDMethod(const FunctionCallbackInfo<Value>& args) {
   void (*kernel)(Ptr<Int>, Ptr<Int>, Ptr<Int>)  = gcdObj->getKernel(); 
   
   auto k = compile(*kernel);
+  k.setNumQPUs(8);
   
   // Allocate and initialise arrays shared between ARM and GPU
   SharedArray<int> a(16), b(16), r(16);
