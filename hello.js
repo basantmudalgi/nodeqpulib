@@ -4,5 +4,8 @@
 	return require('./build/Debug/qpulib');
 }*/
 var addon = require('./build/Release/qpulib');
-console.log(addon.qpulib());
-console.log(addon.qpugcd());
+var kernels = require('./build/Release/kernels');
+
+const gcdKern = kernels.createObject();
+
+console.log(addon.qpugcd(gcdKern));

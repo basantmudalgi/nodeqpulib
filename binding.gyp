@@ -147,7 +147,30 @@
 	'Lib/VideoCore'
       ],
       'include_dirs': ['./QPULib-master/Lib'],  # dependents need to find .h lib
-      'sources': ['qpulib.cc'],
+      'sources': ['qpulib.cc', 'kernels/GCDObj.cc'],
+      'cflags':[
+		'-DQPU_MODE',
+		'-DEBUG',
+		'-Wconversion',
+		'-std=c++0x'
+	],
+	'cflags_cc!':[
+		'-DQPU_MODE',
+		'-DEBUG',
+		'-Wconversion',
+		'-std=c++0x'
+	]
+    },
+    {
+      'target_name': 'kernels',
+      'dependencies': [
+	'Lib/Kernel', 
+	'Lib/Source',
+	'Lib/Target',
+	'Lib/VideoCore'
+      ],
+      'include_dirs': ['./QPULib-master/Lib'],  # dependents need to find .h lib
+      'sources': ['kernels/GCD.cc', 'kernels/GCDObj.cc'],
       'cflags':[
 		'-DQPU_MODE',
 		'-DEBUG',

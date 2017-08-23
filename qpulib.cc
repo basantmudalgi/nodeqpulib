@@ -3,6 +3,7 @@
 #include <string>
 #include <stdlib.h>
 #include "QPULib.h"
+#include "kernels/GCDObj.h"
 
 namespace nodeqpulib {
 
@@ -33,12 +34,18 @@ void gcd(Ptr<Int> p, Ptr<Int> q, Ptr<Int> r)
   *r = a;
 }
 
-
 void GCDMethod(const FunctionCallbackInfo<Value>& args) {
 
+  
   // Construct kernel
-  auto k = compile(gcd);
+ // auto k = compile(gcd);
 
+  GCDObj* gcdObj = node::ObjectWrap::Unwrap<GCDObj>(
+              args[0]->ToObject());
+  void (*kernel)(Ptr<Int>, Ptr<Int>, Ptr<Int>)  = gcdObj->getKernel(); 
+  
+  auto k = compile(*kernel);
+  
   // Allocate and initialise arrays shared between ARM and GPU
   SharedArray<int> a(16), b(16), r(16);
   srand(0);
@@ -58,8 +65,11 @@ void GCDMethod(const FunctionCallbackInfo<Value>& args) {
   args.GetReturnValue().Set(String::NewFromUtf8(isolate, "Done"));
 }
 
+
+
 void init(Local<Object> exports) {
-  NODE_SET_METHOD(exports, "qpulib", Method);
+  GCDObj::Init(exports);
+  //NODE_SET_METHOD(exports, "qpulib", Method);
   NODE_SET_METHOD(exports, "qpugcd", GCDMethod);
 }
 
